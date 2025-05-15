@@ -39,8 +39,6 @@ st.title("🔬 AI Skin Cancer Detector")
 st.markdown("Upload a skin lesion image and let the AI classify it.")
 
 # Upload image
-st.markdown("### 📤 Upload a Skin Lesion Image")
-
 uploaded_file = st.file_uploader(
     "Choose an image file",
     type=["jpg", "jpeg", "png"],
@@ -50,21 +48,23 @@ uploaded_file = st.file_uploader(
 if uploaded_file is not None:
     st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
-    # Continue image processing here
+    # Image processing
     img = Image.open(uploaded_file).resize((224, 224))
     img_array = np.array(img) / 255.0
     img_array = img_array.reshape(1, 224, 224, 3)
 
+    # Predict
     prediction = model.predict(img_array)
     predicted_class = np.argmax(prediction)
     confidence = prediction[0][predicted_class]
     label = class_names[predicted_class]
     description = class_descriptions.get(label, "No description available.")
 
+    # Show result
     st.success(f"🧠 Prediction: **{label}** ({confidence:.2%} confidence)")
     st.info(f"ℹ️ {description}")
 
-    # Bar chart for confidence
+    # Confidence bar chart
     st.subheader("📊 Model Confidence")
     fig, ax = plt.subplots()
     ax.barh(class_names, prediction[0], color="skyblue")
@@ -75,10 +75,7 @@ if uploaded_file is not None:
         ax.text(v + 0.01, i, f"{v:.2%}", va='center')
     st.pyplot(fig)
 
-else:
-    st.warning("👆 Please upload a skin lesion image to begin.")
- 
-    # PDF Report Download
+    # Generate PDF report
     from fpdf import FPDF
     import base64
     import datetime
@@ -99,6 +96,9 @@ else:
     b64 = base64.b64encode(pdf_data).decode()
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="skin_cancer_report.pdf">📄 Download Report</a>'
     st.markdown(href, unsafe_allow_html=True)
+
+else:
+    st.warning("👆 Please upload a skin lesion image to begin.")
 
 # Streamlit download button
 pdf_data = create_pdf(label, confidence)
