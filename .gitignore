@@ -8,3 +8,4 @@ __pycache__/
 *.jpg
 *.png
 __pycache__/
+hmnist_28_28_RGB.csv
