@@ -78,3 +78,4 @@ Pillow
 matplotlib
 fpdf
 
+fpdf==1.7.2
