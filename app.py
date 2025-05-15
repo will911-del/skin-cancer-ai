@@ -78,22 +78,27 @@ if uploaded_file is not None:
 else:
     st.warning("👆 Please upload a skin lesion image to begin.")
  
-from fpdf import FPDF
-import base64
-import datetime
+    # PDF Report Download
+    from fpdf import FPDF
+    import base64
+    import datetime
 
-# Function to create PDF report
-def create_pdf(pred_class, confidence):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=14)
-    pdf.cell(200, 10, txt="Skin Cancer AI Report", ln=True, align="C")
-    pdf.ln(10)
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=f"Prediction: {pred_class}", ln=True)
-    pdf.cell(200, 10, txt=f"Confidence: {confidence:.2%}", ln=True)
-    pdf.cell(200, 10, txt=f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", ln=True)
-    return pdf.output(dest="S").encode("latin1")
+    def create_pdf(pred_class, confidence):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=14)
+        pdf.cell(200, 10, txt="Skin Cancer AI Report", ln=True, align="C")
+        pdf.ln(10)
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt=f"Prediction: {pred_class}", ln=True)
+        pdf.cell(200, 10, txt=f"Confidence: {confidence:.2%}", ln=True)
+        pdf.cell(200, 10, txt=f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", ln=True)
+        return pdf.output(dest="S").encode("latin1")
+
+    pdf_data = create_pdf(label, confidence)
+    b64 = base64.b64encode(pdf_data).decode()
+    href = f'<a href="data:application/octet-stream;base64,{b64}" download="skin_cancer_report.pdf">📄 Download Report</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 # Streamlit download button
 pdf_data = create_pdf(label, confidence)
