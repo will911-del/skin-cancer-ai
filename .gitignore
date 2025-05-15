@@ -5,3 +5,6 @@
 *.keras
 __pycache__/
 
+*.jpg
+*.png
+__pycache__/
