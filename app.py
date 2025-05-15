@@ -42,6 +42,17 @@ if uploaded_file:
 
 import matplotlib.pyplot as plt
 
+# Define class names first
+class_names = [
+    "Actinic Keratoses",
+    "Basal Cell Carcinoma",
+    "Benign Keratosis-like Lesions", 
+    "Dermatofibroma",
+    "Melanocytic Nevi",
+    "Vascular Lesions",
+    "Melanoma"
+]
+
 # Bar chart for confidence
 st.subheader("📊 Model Confidence")
 fig, ax = plt.subplots()
@@ -52,15 +63,6 @@ ax.set_title("Confidence for Each Class")
 for i, v in enumerate(prediction[0]):
     ax.text(v + 0.01, i, f"{v:.2%}", va='center')
 st.pyplot(fig)
-class_names = [
-    "Actinic Keratoses",
-    "Basal Cell Carcinoma",
-    "Benign Keratosis-like Lesions",
-    "Dermatofibroma",
-    "Melanocytic Nevi",
-    "Vascular Lesions",
-    "Melanoma"
-]
  
 from fpdf import FPDF
 import base64
